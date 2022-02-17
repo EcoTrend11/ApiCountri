@@ -10,17 +10,17 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    img : {
+    flags : {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
-    continent: {
+    region: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     capital : {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     subregion : {
       type: DataTypes.STRING,
