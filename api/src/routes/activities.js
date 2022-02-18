@@ -1,50 +1,38 @@
-const express = require('express');
-const router = express.Router();
+const { Router } = require("express");
 const { Country, Activity } = require("../db.js");
+const { Op } = require("sequelize");
+const {toUpper} = require('../auxMayus')
+
+const router = Router();
 
 router.get('/',  async (req, res) =>{
     const findActivity = await Activity.findAll()
     res.send(findActivity)
   })
 
-router.post('/addActivity',  async (req, res) =>{
-    const countryId = req.body.countryId
-    const activity = req.body.activity
-    
-    const findActivity = await Activity.findAll({
-        where : {
-            name : activity[0].name
-        }
-    })
-    if(findActivity.length === 0){
+router.post('/addActivity', async (req, res)=>{
 
-        await activity.map(e =>{
-            Activity.create({
-                name : e.name,
-                level : e.level,
-                duration : e.duration,
-                season : e.season
-            })
-            console.log("actividad creada")
+
+
+
+        const { name, level, duration, season} = req.body
+        const countriId = req.body.countriId
+    
+        const createActivity= await Activity.create({
+            name : name,
+            level : level,
+            duration : duration,
+            season : season,
         })
-    }
+        console.log(countriId)
+        
+        
+        await createActivity.addCountry(toUpper(countriId[0]))
+        res.send("creado con exito")
 
-    findActivity
-
-    
-
-    console.log(findActivity.length)    
-    // const prueba = await activity.map(e =>{
-    //     Activity.create({
-    //         name : e.name,
-    //         level : e.level,
-    //         duration : e.duration,
-    //         season : e.season
-    //     })
-    // })
-
-    res.send("sss")
+        
+        
+}) 
 
 
-})
 module.exports = router

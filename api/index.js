@@ -13,19 +13,19 @@ conn.sync({ force: false }).then(() => {
 
   // //[{},{},{}]
 
-  //    const prueba = await apiAxios.map(e =>{
+  //     apiAxios.forEach(async (e) =>{
         
   //       try{
 
-  //         return Country.create({
-  //         id: e.ccn3 ? e.ccn3 : [],
-  //         name: e.name.common ? e.name.common: [],
-  //         flags: e.flags[1] ? e.flags[1]: [],
-  //         region: e.region ? e.region: [],
-  //         capital: e.capital[0] ? e.capital[0]: "sin capital",
-  //         subregion: e.subregion ? e.subregion: [] ,
-  //         area: e.area ? e.area : [],
-  //         population: e.population? e.population : [],
+  //         const CreateCountry= await Country.create({
+  //         id: e.ccn3 ? e.cca3 : "no Id",
+  //         name: e.name.common ? e.name.common: "No name",
+  //         flags: e.flags[1] ? e.flags[1]: "no flag",
+  //         region: e.region ? e.region: "no region",
+  //         capital: e.capital ? e.capital[0]: "no capital",
+  //         subregion: e.subregion ? e.subregion: "no subregion" ,
+  //         area: e.area ? e.area : "no area",
+  //         population: e.population? e.population : "no population",
   //        })
   //       }
   //       catch(error){
