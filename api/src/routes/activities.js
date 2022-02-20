@@ -1,61 +1,85 @@
 const { Router } = require("express");
 const { Country, Activity } = require("../db.js");
-const { Op } = require("sequelize");
-const {toUpper} = require('../auxMayus')
+const { IdPaisSinActividad } = require("../auxiliar/auxiliar")
+
 
 const router = Router();
 
 router.get('/',  async (req, res) =>{
     const findActivity = await Activity.findAll()
-    res.send(findActivity)
+    res.send(findActivity) 
   })
 
 router.post('/addActivity', async (req, res)=>{
 
         const { name, level, duration, season} = req.body
         const countriId = req.body.countriId
-
-        const search = countriId.map(async (e) => {
-          let country = await Country.findByPk(e)
-          // console.log(country)
-          
+        const actividad = await Activity.findOne({
+          where : {name : name}
         })
-        console.log(search)
-        res.send(search)
 
+        const promesaPaises = countriId.map(async(e) =>{
 
+          const pais = await  Country.findByPk(e,{
+            include : [{
+              model :Activity,
+              where : {name : name}
+            }]
+          })
+          if(pais){
+            return {
+              resume: `pais con id:${e} ya tiene la actividad`,
+              tieneActividad : true,
+              IdDePais : e,
+            }
+          }else{
+            return {
+              resume: `pais con id:${e} un no tiene la actividad`,
+              tieneActividad : false,
+              IdDePais : e
+            }
+          }
+        })
+        const paises  = await  Promise.all(promesaPaises)
 
-        // if(countriId.length === 1){
-        //   const searchActivityCountry = await Country.findByPk(countriId[0],{
-        //     include : [{
-        //       model : Activity,
-        //       where: {name : name}
-        //     }]
-        //   })
-          
-        //   if(searchActivityCountry){
-        //     res.send(`el pais de id(s):${countriId[0]} ya tiene esa actividad`)
-        //   }else{
+        // const paises = par (countriId)
+        console.log(paises)
 
-        //   const createActivity= await Activity.create({
-        //       name : name,
-        //       level : level,
-        //       duration : duration,
-        //       season : season,
-        //   })
-                  
-        //   await createActivity.addCountry(toUpper(countriId[0]))
-        //   res.send(`Actividad ${name} creadad en el pais de id${countriId[0]}`)
-        //   }
-        // }
-        // if(countriId.length > 1){
+        const IdSinActividad = IdPaisSinActividad(paises)
 
-        
-         
+        if(IdSinActividad.length === 0){
+          res.send("todos los paises tienen esta actividad ")
+        }
+        if(IdSinActividad.length === 1){
+          if(actividad ==! null){
+            await actividad.addCountry(IdSinActividad[0])
+          }
+          if(actividad === null){
+            const createActivity = await Activity.create({
+              name : name,
+              level : level,
+              duration : duration,
+              season : season
+            })
+            await createActivity.addCountry(IdSinActividad[0])
+          }
+          res.send(`actividad: ${name}, agregada correctamente al pais de id:${IdSinActividad}`)
+        }
+        if(IdSinActividad.length > 1){
+          if(actividad !==null){
+            actividad.addCountries(IdSinActividad)
+          }
+          if(actividad === null){
+            const createActivity = await Activity.create({
+              name : name,
+              level : level,
+              duration : duration,
+              season : season
+            })
+            await createActivity.addCountries(IdSinActividad)
+          }
+        }
 
-
-        
-        
 }) 
 
 

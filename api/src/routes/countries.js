@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { Country, Activity } = require("../db.js");
 const { Op } = require("sequelize");
-const { toUpper} =require("../auxMayus")
+
 
 const router = Router();
 
@@ -15,7 +15,7 @@ router.get('/',  async (req, res) =>{
 router.get('/byId/:id',async (req, res)=>{
   
   const id = req.params.id
-  const findCountryById = await Country.findByPk(toUpper(id),{
+  const findCountryById = await Country.findByPk(id,{
     include : Activity
   });
 

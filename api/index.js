@@ -7,37 +7,34 @@ const axios = require('axios')
 conn.sync({ force: false }).then(() => {
   server.listen(3001, async () => {
 
-  //   let apiAxios = await axios.get('https://restcountries.com/v3/all')
-  //   apiAxios= apiAxios.data;
-  //   // console.log(apiAxios)
+    // let apiAxios = await axios.get('https://restcountries.com/v3/all')
+    // apiAxios= apiAxios.data;
 
-  // //[{},{},{}]
-
-  //     apiAxios.forEach(async (e) =>{
+    //   apiAxios.forEach(async (e) =>{
         
-  //       try{
+    //     try{
 
-  //         const CreateCountry= await Country.create({
-  //         id: e.ccn3 ? e.cca3 : "no Id",
-  //         name: e.name.common ? e.name.common: "No name",
-  //         flags: e.flags[1] ? e.flags[1]: "no flag",
-  //         region: e.region ? e.region: "no region",
-  //         capital: e.capital ? e.capital[0]: "no capital",
-  //         subregion: e.subregion ? e.subregion: "no subregion" ,
-  //         area: e.area ? e.area : "no area",
-  //         population: e.population? e.population : "no population",
-  //        })
-  //       }
-  //       catch(error){
-  //         console.log(error)
-  //       }
-  //   })
+    //       const CreateCountry= await Country.create({
+    //       id: e.ccn3 ? e.cca3 : "no Id",
+    //       name: e.name.common ? e.name.common: "No name",
+    //       flags: e.flags[1] ? e.flags[1]: "no flag",
+    //       region: e.region ? e.region: "no region",
+    //       capital: e.capital ? e.capital[0]: "no capital",
+    //       subregion: e.subregion ? e.subregion: "no subregion" ,
+    //       area: e.area ? e.area : "no area",
+    //       population: e.population? e.population : "no population",
+    //      })
+    //     }
+    //     catch(error){
+    //       console.log(error)
+    //     }
+    // })
 
     console.log('%s listening at 3001');
      // eslint-disable-line no-console
   });
 });
-
+ 
 
 
 // let prueba = [{
