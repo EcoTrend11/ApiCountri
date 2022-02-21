@@ -1,12 +1,15 @@
 const { Router } = require("express");
 const { Country, Activity } = require("../db.js");
-const { IdPaisSinActividad } = require("../auxiliar/auxiliar")
+const { IdPaisSinActividad } = require("../auxiliar/IdPaisSinActividad")
+const { IdPaisConActividad } =require("../auxiliar/IdPaisConActividad")
 
 
 const router = Router();
 
 router.get('/',  async (req, res) =>{
-    const findActivity = await Activity.findAll()
+    const findActivity = await Activity.findAll({
+      include : Country
+    })
     res.send(findActivity) 
   })
 
@@ -14,6 +17,7 @@ router.post('/addActivity', async (req, res)=>{
 
         const { name, level, duration, season} = req.body
         const countriId = req.body.countriId
+        
         const actividad = await Activity.findOne({
           where : {name : name}
         })
@@ -41,18 +45,24 @@ router.post('/addActivity', async (req, res)=>{
           }
         })
         const paises  = await  Promise.all(promesaPaises)
-
-        // const paises = par (countriId)
-        console.log(paises)
-
+        const IdConActividad = IdPaisConActividad(paises)
         const IdSinActividad = IdPaisSinActividad(paises)
+        console.log(IdSinActividad[0])
+
 
         if(IdSinActividad.length === 0){
-          res.send("todos los paises tienen esta actividad ")
+          countriId.length === 1 ?
+              res.send(`el pais ya tiene la actividad ${name} `):
+              res.send(`todos los paises tienen la actividad ${name} `)
         }
         if(IdSinActividad.length === 1){
-          if(actividad ==! null){
+          if(actividad !== null){
             await actividad.addCountry(IdSinActividad[0])
+            
+            IdConActividad.length === 0 ?
+                res.send(`actividad creada en el pais de id: ${IdSinActividad[0]}`):
+                res.send(`actividad creada en el pais de id: ${IdSinActividad[0]},
+                          pais(es) con id: ${IdConActividad} ya tenian la actividad`)
           }
           if(actividad === null){
             const createActivity = await Activity.create({
@@ -62,12 +72,21 @@ router.post('/addActivity', async (req, res)=>{
               season : season
             })
             await createActivity.addCountry(IdSinActividad[0])
+            
+            IdConActividad.length === 0 ?
+            res.send(`actividad creada en el pais de id: ${IdSinActividad[0]}`):
+            res.send(`actividad creada en el pais de id: ${IdSinActividad[0]},
+                      pais(es) con id: ${IdConActividad} ya tenian la actividad`)
           }
-          res.send(`actividad: ${name}, agregada correctamente al pais de id:${IdSinActividad}`)
         }
         if(IdSinActividad.length > 1){
           if(actividad !==null){
             actividad.addCountries(IdSinActividad)
+            
+            IdConActividad.length === 0 ?
+            res.send(`actividad creada en el pais de id: ${IdSinActividad}`):
+            res.send(`actividad creada en el pais de id: ${IdSinActividad},
+                      pais(es) con id: ${IdConActividad} ya tenian la actividad`)
           }
           if(actividad === null){
             const createActivity = await Activity.create({
@@ -77,6 +96,11 @@ router.post('/addActivity', async (req, res)=>{
               season : season
             })
             await createActivity.addCountries(IdSinActividad)
+
+            IdConActividad.length === 0 ?
+            res.send(`actividad creada en el pais de id: ${IdSinActividad}`):
+            res.send(`actividad creada en el pais de id: ${IdSinActividad},
+                      pais(es) con id: ${IdConActividad} ya tenian la actividad`)
           }
         }
 
