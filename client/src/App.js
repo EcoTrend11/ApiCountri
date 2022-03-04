@@ -1,26 +1,29 @@
 import './App.css';
-import { useEffect } from 'react';
-import { useSelector , useDispatch } from 'react-redux';
-import { getCountries } from './actions/index';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
+import CountriesGrid from './components/Home/CountriesGrid.jsx';
+import CountryDetail from './components/Detail/CountryDetail';
+import Formulario from './components/Formulario/Formulario';
+import Landing from './components/LandingPage/Landing';
 
-function App() {
 
-  const  countries = useSelector(function(state){
-    return state.countries
-  });
 
-  const dispatch = useDispatch();
 
-  useEffect(function() {
-    dispatch(getCountries())
-  },)
+function App(){
 
-  console.log(countries)
   return (
-    <div className="App">
-      <h1>Henry Countries</h1>
-      <div>{countries}</div>
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path ='/'><Landing/></Route>
+        <Route exact path='/countryDetail/:countryId'><CountryDetail/></Route>
+        <Route  path='/home' ><CountriesGrid/></Route>
+        <Route exact path='/formulario'><Formulario/></Route>
+      </Switch>
+    </Router>
+    
   );
 }
 

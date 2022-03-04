@@ -7,7 +7,9 @@ const router = Router();
 
 router.get('/',  async (req, res) =>{
 
-  const findCountry = await Country.findAll()
+  const findCountry = await Country.findAll({
+    include : Activity
+  })
   res.send(findCountry)
 })
 
@@ -27,6 +29,7 @@ router.get('/byId/:id',async (req, res)=>{
 
 router.get('/byQuery', async (req, res) =>{
   const name = req.query.name
+  console.log(name)
   
   if(name){
 
@@ -38,7 +41,7 @@ router.get('/byQuery', async (req, res) =>{
         }
       })
       findByQuery.length === 0 ? 
-              res.status(404).send("pais no encontrado"):
+              res.status(404).send([{error:"pais no encontrado"}]):
               res.send(findByQuery)
   }else{
     res.status(404).send('query invalido o no se mando alguno')

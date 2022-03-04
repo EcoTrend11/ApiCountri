@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { Country, Activity } = require("../db.js");
 const { IdPaisSinActividad } = require("../auxiliar/IdPaisSinActividad")
-const { IdPaisConActividad } =require("../auxiliar/IdPaisConActividad")
+const { IdPaisConActividad } = require("../auxiliar/IdPaisConActividad")
 
 
 const router = Router();
@@ -47,7 +47,6 @@ router.post('/addActivity', async (req, res)=>{
         const paises  = await  Promise.all(promesaPaises)
         const IdConActividad = IdPaisConActividad(paises)
         const IdSinActividad = IdPaisSinActividad(paises)
-        console.log(IdSinActividad[0])
 
 
         if(IdSinActividad.length === 0){

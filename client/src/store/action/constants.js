@@ -1,0 +1,7 @@
+export const  GET_COUNTRIES = "GET_COUNTRIES"
+export const  COUNTRY_DETAIL= "COUNTRY_DETAIL"
+export const FILTER_COUNTRY = "FILTER_COUNTRY"
+export const SEARCH_BY_NAME = "SEARCH_BY_NAME"
+export const SET_VALUE = "SET_VALUE"
+export const FILTER_ABC = "FILTER_ABC"
+export const FILTER_CONTINENT = "FILTER_CONTINENT"
